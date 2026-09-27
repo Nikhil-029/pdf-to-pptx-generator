@@ -82,6 +82,18 @@ uvicorn app.main:app --reload
 celery -A app.worker worker --loglevel=info
 ```
 
+### 4. Demo UI (optional)
+
+A simple Streamlit frontend (`app/ui.py`) wraps the API with a file upload,
+a live progress bar tied to the job's actual pipeline stage, and a download
+button — useful for demos without needing `curl`/Postman.
+
+```bash
+streamlit run app/ui.py
+```
+
+Requires the API server (step 2 or 3) already running on `localhost:8000`.
+
 ---
 
 ## API Reference

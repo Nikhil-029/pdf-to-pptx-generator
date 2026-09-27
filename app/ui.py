@@ -4,7 +4,7 @@ import requests
 import time
 
 # Point this to your FastAPI server
-API_BASE_URL = "http://localhost:9000/api/v1/pdf"
+API_BASE_URL = "http://localhost:8000/api/v1/pdf"
 
 # Page Configuration
 st.set_page_config(page_title="AI Deck Builder", page_icon="📊", layout="centered")
@@ -44,7 +44,6 @@ if uploaded_file is not None:
         status_placeholder = st.empty()
         progress_bar = st.progress(0)
 
-        # Also add a missing status: fetching_images
         status_map = {
             "queued":                    (5,   "⏳ Queued for processing..."),
             "downloading_from_storage":  (15,  "☁️ Retrieving from MinIO storage..."),
@@ -63,7 +62,7 @@ if uploaded_file is not None:
         while True:
             try:
                 status_res = requests.get(
-                    f"{API_BASE_URL}/jobs/{job_id}/status",
+                    f"{API_BASE_URL}/jobs/{job_id}",
                     timeout=30,
                 )
             except requests.exceptions.RequestException:
@@ -103,8 +102,7 @@ if uploaded_file is not None:
                 download_path = result.get("download_url", "")
 
                 if download_path:
-                    # Fix: use the same port as API_BASE_URL (9000), not hardcoded 8000
-                    full_download_url = f"http://localhost:9000{download_path}"
+                    full_download_url = f"http://localhost:8000{download_path}"
 
                     # Native Streamlit download button (fetches file as bytes)
                     try:

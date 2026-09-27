@@ -26,6 +26,9 @@ boto3>=1.34.0
 # HTTP client (image fetching)
 requests>=2.31.0
 
+# Demo frontend
+streamlit>=1.35.0
+
 # Testing (optional)
 pytest>=8.2.0
 httpx>=0.27.0
