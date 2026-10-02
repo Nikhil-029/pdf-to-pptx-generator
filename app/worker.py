@@ -45,15 +45,15 @@ def process_pdf_task(self, job_id: str, pdf_path: str, original_filename: str):
     try:
         # ── 1. Text extraction ───────────────────────────────────────────────
         _progress("extracting", 10)
-        from services.pipeline_service import PipelineService
+        from app.services.pipeline_service import PipelineService
 
         pipeline_result = PipelineService.process_pdf(pdf_path)
 
         # ── 2. LLM – summarise + outline ────────────────────────────────────
         _progress("generating_outline", 30)
-        from services.llm_provider_factory import get_llm_provider
-        from services.summarization_service import SummarizationService
-        from services.outline_generation_service import OutlineGenerationService
+        from app.services.llm_provider_factory import get_llm_provider
+        from app.services.summarization_service import SummarizationService
+        from app.services.outline_generation_service import OutlineGenerationService
 
         llm = get_llm_provider()
         summary = SummarizationService(llm).summarize(
@@ -70,7 +70,7 @@ def process_pdf_task(self, job_id: str, pdf_path: str, original_filename: str):
 
         # ── 3. Image fetching ───────────────────────────────────────────────
         _progress("fetching_images", 60)
-        from services.image_service import ImageFetchingService
+        from app.services.image_service import ImageFetchingService
 
         slide_images: dict[int, str] = {}
         for slide in outline.slides:
@@ -89,7 +89,7 @@ def process_pdf_task(self, job_id: str, pdf_path: str, original_filename: str):
 
         # ── 4. Render PPTX ──────────────────────────────────────────────────
         _progress("rendering_pptx", 80)
-        from services.pptx_service import PptxRendererService
+        from app.services.pptx_service import PptxRendererService
 
         output_filename = f"{job_id}_presentation.pptx"
         output_path = settings.OUTPUT_DIR / output_filename

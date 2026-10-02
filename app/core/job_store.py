@@ -21,7 +21,7 @@ def _redis_client():
     """Lazy import + connect so startup never crashes if Redis is absent."""
     try:
         import redis
-        from core.config import settings
+        from app.core.config import settings
 
         client = redis.Redis.from_url(settings.REDIS_URL, decode_responses=True)
         client.ping()

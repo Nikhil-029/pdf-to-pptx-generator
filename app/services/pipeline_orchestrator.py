@@ -44,16 +44,16 @@ async def run_pipeline_background(
         JobStore.update_status(job_id, "extracting", progress=10)
         logger.info("[%s] Extracting text from %s", job_id, pdf_path.name)
 
-        from services.pipeline_service import PipelineService
+        from app.services.pipeline_service import PipelineService
         pipeline_result = PipelineService.process_pdf(pdf_path)
 
         # ── Step 2: LLM – summarise + generate outline ───────────────────────
         JobStore.update_status(job_id, "generating_outline", progress=30)
         logger.info("[%s] Calling LLM for summary + outline", job_id)
 
-        from services.llm_provider_factory import get_llm_provider
-        from services.summarization_service import SummarizationService
-        from services.outline_generation_service import OutlineGenerationService
+        from app.services.llm_provider_factory import get_llm_provider
+        from app.services.summarization_service import SummarizationService
+        from app.services.outline_generation_service import OutlineGenerationService
 
         llm = get_llm_provider()
         summary = SummarizationService(llm).summarize(
@@ -72,7 +72,7 @@ async def run_pipeline_background(
         JobStore.update_status(job_id, "fetching_images", progress=60)
         logger.info("[%s] Fetching images for slides", job_id)
 
-        from services.image_service import ImageFetchingService
+        from app.services.image_service import ImageFetchingService
 
         slide_images: dict[int, str] = {}
         for slide in outline.slides:
@@ -93,7 +93,7 @@ async def run_pipeline_background(
         JobStore.update_status(job_id, "rendering_pptx", progress=80)
         logger.info("[%s] Rendering PPTX", job_id)
 
-        from services.pptx_service import PptxRendererService
+        from app.services.pptx_service import PptxRendererService
 
         output_filename = f"{job_id}_presentation.pptx"
         output_path = settings.OUTPUT_DIR / output_filename
