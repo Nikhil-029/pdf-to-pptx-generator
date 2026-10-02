@@ -1,4 +1,4 @@
-# PDF → PPTX Generator API (v2)
+# PDF → PPTX Generator API
 
 Turn a raw PDF report into a client-ready slide deck in minutes. Upload a
 PDF, and a two-stage LLM pipeline (content planning → outline generation)
